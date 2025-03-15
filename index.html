@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>misunderstanding</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        const images = [
+            { src: "./assets/watermelon.avif",  title: "watermelon" },
+            { src: "./assets/apple.jpg",  title: "apple" },
+            { src: "./assets/banana.jpg",  title: "banana" },
+            { src: "./assets/hands.jpg",  title: "hands" },
+            { src: "./assets/iphone.jpg",  title: "iphone" },
+            { src: "./assets/nokia.jpg",  title: "nokia" },
+            { src: "./assets/car.jpg",  title: "car" },
+            { src: "./assets/lazy boy chair.jpg",  title: "chair" },
+            { src: "./assets/cat.jpg",  title: "cat" },
+            { src: "./assets/cat2.webp",  title: "cat" },
+            { src: "./assets/man.jpg",  title: "man" },
+            { src: "./assets/girl.jpg",  title: "woman" },
+            { src: "./assets/girl.jpg",  title: "girl" },
+
+ 
+            
+        ];
+
+        let currentImage;
+        let countdown;
+
+        function loadRandomImage() {
+            const randomIndex = Math.floor(Math.random() * images.length);
+            currentImage = images[randomIndex];
+            document.getElementById("main-img").src = currentImage.src;
+            document.getElementById("main-title").innerText = currentImage.title;
+        }
+
+        function checkAnswer() {
+            const userInput = document.getElementById("answer-input").value.trim();
+            const randomTitle = images[Math.floor(Math.random() * images.length)].title;  
+            const resultText = userInput.toLowerCase() === currentImage.title.toLowerCase() 
+                ? `Wrong! its a : ${randomTitle}` 
+                : `Wrong! its a : ${currentImage.title}`;
+            document.getElementById("result").innerText = resultText;
+            
+            let secondsLeft = 3;
+            document.getElementById("countdown").innerText = `Reloading in ${secondsLeft} seconds...`;
+            countdown = setInterval(() => {
+                secondsLeft--;
+                document.getElementById("countdown").innerText = `Reloading in ${secondsLeft} seconds...`;
+                if (secondsLeft === 0) {
+                    clearInterval(countdown);
+                    location.reload();
+                }
+            }, 1000);
+        }
+
+        document.addEventListener("DOMContentLoaded", function() {
+            document.getElementById("answer-input").focus(); // Ensure input is focused on page load
+            document.getElementById("answer-input").addEventListener("keypress", function(event) {
+                if (event.key === "Enter") {
+                    event.preventDefault(); // Prevent form submission if inside a form
+                    checkAnswer();
+                    playRandomSound();
+                }
+            });
+        });
+
+        const sounds = [
+         "./assets/1.ogg",
+         "./assets/2.ogg",
+         "./assets/3.ogg",
+         "./assets/4.ogg",
+         "./assets/5.ogg"
+          
+          
+        ];
+
+        function playRandomSound() {
+            const randomSound = sounds[Math.floor(Math.random() * sounds.length)];
+            const audio = new Audio(randomSound);
+            audio.play();
+        }
+    </script>
+</head>
+<body class="bg-gray-100 flex items-center justify-center h-screen" onload="loadRandomImage()">
+    <div class="max-w-2xl p-6 bg-white shadow-lg rounded-xl text-center gap-20">
+        <p id="countdown" class="text-red-500 text-lg font-semibold"></p>
+        <div class="flex items-center justify-center">
+            <div class="flex flex-col justify-center items-center mt-6">
+                <img src="./assets/some one thinking.jpg" alt="Side Image" class="rounded-lg w-52 mr-4">
+                <h1 class="text-3xl font-bold text-blue-600 mt-4">What is it?</h1>
+            </div>
+            <div>
+                <img id="main-img" src="" alt="Sample Image" class="w-52 object-cover h-52 mx-auto rounded-lg">
+                <p class="text-gray-700">Describe what you see in the image.</p>
+            </div>
+        </div>
+        <input id="answer-input" type="text" placeholder="Enter your answer..." class=" mt-6 w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+        <button onclick="checkAnswer(), playRandomSound()" class="mt-4 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition">Submit</button>
+        <p id="result" class="mt-4 text-lg font-semibold"></p>
+    </div>
+</body>
+</html>
